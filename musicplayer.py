@@ -101,6 +101,7 @@ def options(n):
 def pause():
     global state
     global initialPlay
+    #to replay the song if it ends
     if not mixer.music.get_busy() and state == True:
         mixer.music.load(currentsong)
         mixer.music.play()

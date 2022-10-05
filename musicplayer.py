@@ -17,7 +17,7 @@ import time
 player = Tk()
 player.geometry('500x350')
 player.title('mp3 Player')
-#player.resizable(False,False)
+player.resizable(False,False)
 sys.setrecursionlimit(1000)
 mixer.init()
 mixer.music.set_volume(0.5)
@@ -30,6 +30,7 @@ state = False
 skip = True
 initialPlay = False
 removedSong = 0
+#fetching file names
 lst = os.listdir('music player/songs/')
 lst2 = []
 lst3 = []
@@ -60,7 +61,9 @@ def options(n):
         queue1.insert(END, os.path.basename(song.rstrip('.mp3'))) 
         shutil.copy(song, 'music player/songs/')
         selection.set('Options')
+    
     elif selection.get() == 'Remove Song':
+        #remove music window
         RemoveSong = Tk()
 
         def removeSelection():
@@ -73,7 +76,7 @@ def options(n):
             removedSong += 1
             remove()
 
-        
+        #remove music window listbox
         queue1 = Listbox(RemoveSong,width=42,height=12,bg='black',fg='green')
         queue1.grid(row=0,column=0,columnspan=3)
         
@@ -86,12 +89,13 @@ def options(n):
             lst2.append(lst[0])
             lst.remove(lst[0])
 
-        
+        #remove music window button
         removeButton = Button(RemoveSong,text='Remove Song',command=removeSelection)
         removeButton.grid(row=1,column=1)
 
         selection.set('Options')
         RemoveSong.mainloop()
+    
     elif selection.get() == 'Convert File Type':
         #open browser
         webbrowser.open('https://audio.online-convert.com/convert-to-mp3', new=1)
@@ -101,6 +105,7 @@ def options(n):
 def pause():
     global state
     global initialPlay
+    
     #to replay the song if it ends
     if not mixer.music.get_busy() and state == True:
         mixer.music.load(currentsong)
@@ -112,6 +117,7 @@ def pause():
         Thread(target= slider).start()
         Thread(target= lambda:timeUpdate()).start()
         return
+    
     state = not state
     if state == True:
         if initialPlay == False:
@@ -127,6 +133,7 @@ def pause():
         elif not mixer.music.get_busy:
             mixer.music.load(currentsong)
             mixer.music.play(loops=0)
+        
         #to not play the song from begining 
         else:
             mixer.music.unpause()
@@ -157,6 +164,7 @@ def change(n):
         queue.select_set(playlist.index(currentsong))
         queue.select_clear(playlist.index(currentsong) - 1)
         Thread(target= slider).start()
+    
     elif n == 1 and playlist.index(currentsong) == len(playlist)-1:
         skip = False
         currentsong = playlist[0]
@@ -179,6 +187,7 @@ def change(n):
         queue.select_set(playlist.index(currentsong))
         queue.select_clear(playlist.index(currentsong) + 1)
         Thread(target= slider).start()
+    
     elif n == 0 and playlist.index(currentsong) == 0:
         skip = False
         currentsong = playlist[len(playlist)-1]
@@ -189,10 +198,11 @@ def change(n):
         queue.select_set(playlist.index(currentsong))
         queue.select_clear(0)
         Thread(target= slider).start()
+    
+    #starting timer and slider if the music is skipped 
     if n == 0 or 1 and mixer.music.get_busy():
         Thread(target= slider).start()
         Thread(target= lambda:timeUpdate()).start()
-
 
 def volume(n):
     mixer.music.set_volume(volumeSlider.get()/100)
@@ -220,7 +230,7 @@ def slider():
 def remove():
     global currentsong
     for i in lst3:
-        print(i)
+        #checking if the song removed is the one currently playing
         if currentsong == playlist[i]:
             if i == len(playlist) - 1 :
                 queue.delete(i)

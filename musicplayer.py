@@ -31,7 +31,7 @@ skip = True
 initialPlay = False
 removedSong = 0
 #fetching file names
-lst = os.listdir('music player/songs/')
+lst = os.listdir('songs/')
 lst2 = []
 lst3 = []
 lst.pop(0)
@@ -39,7 +39,7 @@ playlist = []
 
 #playlist
 for i in lst:
-    Path = 'music player/songs/'+i
+    Path = 'songs/'+i
     playlist.append(Path)
 currentsong = playlist[0]
 currentsound = mixer.Sound(currentsong)
@@ -55,11 +55,11 @@ for i in range(2):
 def options(n):
     if selection.get() == 'Add Song':
         #open file window
-        song = filedialog.askopenfilename(initialdir='music player/songs/', title='Select A Song',filetypes=(('mp3','*.mp3'),))
+        song = filedialog.askopenfilename(initialdir='songs/', title='Select A Song',filetypes=(('mp3','*.mp3'),))
         playlist.append(song)
         queue.insert(END, os.path.basename(song.rstrip('.mp3'))) 
         queue1.insert(END, os.path.basename(song.rstrip('.mp3'))) 
-        shutil.copy(song, 'music player/songs/')
+        shutil.copy(song, 'songs/')
         selection.set('Options')
     
     elif selection.get() == 'Remove Song':
@@ -248,10 +248,10 @@ def remove():
         
 
 #images
-pauseImage = ImageTk.PhotoImage(Image.open('music player/pause-button.png'))
-forwardImage = ImageTk.PhotoImage(Image.open('music player/forward-button.jpeg'))
-backwardImage = ImageTk.PhotoImage(Image.open('music player/backward-button.jpeg'))
-bgImage = ImageTk.PhotoImage(Image.open('music player/pastel-blue-vignette-concrete-textured-background.jpg'))
+pauseImage = ImageTk.PhotoImage(Image.open('pause-button.png'))
+forwardImage = ImageTk.PhotoImage(Image.open('forward-button.jpeg'))
+backwardImage = ImageTk.PhotoImage(Image.open('backward-button.jpeg'))
+bgImage = ImageTk.PhotoImage(Image.open('pastel-blue-vignette-concrete-textured-background.jpg'))
 
 #app background
 background = Label(player,image=bgImage).place(x=0,y=0)
